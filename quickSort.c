@@ -1,80 +1,61 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-int* createArr();
-void quick_sort(int*, int, int);
 void printArr(int*, int);
+void quickSort(int*, int, int);
+void swap(int*, int*);
 
-int main() {
-	int *arr = createArr();
-    int size = sizeof(arr) / sizeof(arr[0]) + 1;
-
-    printf("Original Array: ");
-	printArr(arr, size);
-
-    quick_sort(arr, 0, size-1);
-
-    printf("\nSorted Array: ");
-	printArr(arr, size);
-
-    printf("\n");
-
-    return 0;
-}
-
-//Function to create a new array
-int* createArr(){
-	int n, i;
-	printf("Enter the number of elements in the array : ");
-	scanf("%d", &n);
+int main(){
+	int arr[] = {7,5,1,0,5,9,11,4,3,6};
+	int size = sizeof(arr)/sizeof(arr[0]);
 	
-	int *arr = (int*)malloc(sizeof(n*sizeof(int)));
-	for(i=0; i<n; i++){
-		printf("Enter %d element : ", i+1);
-		scanf("%d", arr+i);
+	printf("Before Sorting :");
+	printArr(arr, size);
+	
+	quickSort(arr, 0, size-1);
+	
+	printf("\nAfter Sorting :");
+	printArr(arr, size);
+	return 0;
+}
+
+//Function to sort array in a quick sort style
+void quickSort(int arr[], int lowIndex, int highIndex){
+	if(lowIndex >= highIndex){
+		return;
 	}
-	return arr;
+	int pivot = arr[highIndex];
+	
+	int leftPointer = lowIndex;
+	int rightPointer = highIndex;
+	
+	while(leftPointer != rightPointer){
+		while(arr[leftPointer] <= pivot && leftPointer != rightPointer){
+			leftPointer++;
+		}
+		while(arr[rightPointer] >= pivot && leftPointer != rightPointer){
+			rightPointer--;
+		}
+		swap(arr+leftPointer, arr+rightPointer);
+	}
+	swap(arr+leftPointer, arr+highIndex);
+	
+	quickSort(arr, lowIndex, rightPointer-1);
+	quickSort(arr, leftPointer+1, highIndex);
 }
 
-//Function for sorting array in a quick sort style
-void quick_sort(int arr[], int low, int high) {
-    if (low < high) {
-        int pivot = arr[high];
-        int left = low;
-        int right = high - 1;
-
-        while (1) {
-            while (left <= right && arr[left] < pivot) {
-                left++;
-            }
-            while (left <= right && arr[right] > pivot) {
-                right--;
-            }
-            if (left <= right) {
-                int temp = arr[left];
-                arr[left] = arr[right];
-                arr[right] = temp;
-                left++;
-                right--;
-            } else {
-                break;
-            }
-        }
-
-        int temp = arr[left];
-        arr[left] = arr[high];
-        arr[high] = temp;
-
-        quick_sort(arr, low, left - 1);
-        quick_sort(arr, left + 1, high);
-    }
-}
-
-//Function to print elements of array
+//Function to print elements of an array
 void printArr(int arr[], int size){
-	int i;
-	for (i = 0; i < size; i++) {
-        printf("%d ", arr[i]);
-    }
+	int i=0;
+	printf("\n[");
+	for(i=0; i<size; i++){
+		printf("%d ", arr[i]);
+	}
+	printf("\b]\n");
+}
 
+//Function to swap two numbers
+void swap(int *fst, int *cnd){
+	int temp = *fst;
+	*fst = *cnd;
+	*cnd = temp;
 }
