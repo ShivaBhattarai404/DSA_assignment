@@ -26,12 +26,12 @@ void shell_sort(int arr[], int n){
 		int i;
 		for(i=gap; i<n; i++){
 			int current = arr[i];
-			int j=i;
-			while(j>=gap && arr[j-gap]>current){
-				arr[j] = arr[j-gap];
+			int j=i-gap;
+			while(j>=0 && arr[j]>current){
+				arr[j+gap] = arr[j];
 				j-=gap;
 			}
-			arr[j]=current;
+			arr[j+gap]=current;
 		}
 	}
 }
